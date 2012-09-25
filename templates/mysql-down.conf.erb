@@ -1,0 +1,5 @@
+start on stopping mysql
+
+task
+
+exec mysqldump  --password=<%= dbpass %> --user=<%= dbuser %> --opt <%= dbname %> > <%= dbdumppath %>/<%= dbname %>_dev.sql
