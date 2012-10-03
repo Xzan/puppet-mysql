@@ -12,9 +12,17 @@ class mysql::dump($dbuser = "user", $dbpass = "secret", $dbname = 'test', $dbdum
 		require => Exec["create-db"],
 	}
 
-	file{"mysql-down.conf":
-		path => "/etc/init/mysql-down.conf",
-		content => template("mysql/mysql-down.conf.erb"),
-		ensure => present,
+	$upstart = $operatingsystem ? {
+		/RedHat|CentOS|Ubuntu/ => true,
+		/Debian/ => false,
+		default => false,
+	}
+	
+	if $upstart {
+		file{"mysql-down.conf":
+			path => "/etc/init/mysql-down.conf",
+			content => template("mysql/mysql-down.conf.erb"),
+			ensure => present,
+		}
 	}
 }
